@@ -1,0 +1,19 @@
+default:
+  image: docker:latest
+
+stages:
+  - docker-build
+  - docker-push
+
+docker-build:
+  stage: docker-build
+  script:
+    - docker build -t $CI_REGISTRY/unrealengine/test_kuber:latest .
+
+docker-push:
+  stage: docker-push
+  dependencies:
+    - docker-build
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $CI_REGISTRY/unrealengine/test_kuber:latest

@@ -2,18 +2,33 @@ default:
   image: docker:latest
 
 stages:
-  - docker-build
-  - docker-push
+  - docker-build-node-app
+  - docker-push-node-app
+  - docker-build-fortune
+  - docker-push-fortune
 
-docker-build:
-  stage: docker-build
+docker-build-node-app:
+  stage: docker-build-node-app
   script:
-    - docker build -t $CI_REGISTRY/unrealengine/test_kuber:latest .
+    - docker build -t $CI_REGISTRY/unrealengine/test_kuber:node-app ./App_for_tests/Node_app
 
-docker-push:
-  stage: docker-push
+docker-push-node-app:
+  stage: docker-push-node-app
   dependencies:
-    - docker-build
+    - docker-build-node-app
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker push $CI_REGISTRY/unrealengine/test_kuber:latest
+    - docker push $CI_REGISTRY/unrealengine/test_kuber:node-app
+
+docker-build-fortune:
+  stage: docker-build-fortune
+  script:
+    - docker build -t $CI_REGISTRY/unrealengine/test_kuber:fortune ./Chapter-6_Volume/Tom1_empty-dir
+
+docker-push-fortune:
+  stage: docker-push-fortune
+  dependencies:
+    - docker-build-fortune
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $CI_REGISTRY/unrealengine/test_kuber:fortune

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: node-app-1
+  labels:
+    creation_mathod: manual
+    env: prod
+spec:
+  containers:
+  - image: registry.gitlab.com/unrealengine/test_kuber:latest
+    name: node-app
+    ports:
+    - containerPort: 8080
+      protocol: TCP

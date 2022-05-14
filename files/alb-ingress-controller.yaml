@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: alb-ingress-controller
+  name: alb-ingress-controller
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alb-ingress-controller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: alb-ingress-controller
+    spec:
+      containers:
+        - name: alb-ingress-controller
+          args:
+            - --ingress-class=alb
+            - --cluster-name=localjobs.click
+            - --aws-vpc-id=vpc-023e231be8fafc872
+            - --aws-region=eu-central-1
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: AKIA53CIT4AOLEDG2ZHU
+
+            - name: AWS_SECRET_ACCESS_KEY
+              value: "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"
+          image: docker.io/amazon/aws-alb-ingress-controller:v1.1.9
+      serviceAccountName: default
